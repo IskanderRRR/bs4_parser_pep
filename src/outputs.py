@@ -11,13 +11,11 @@ CSV_SAVE_SUCCEED = 'Файл с результатами был сохранён
 
 
 def default_output(results, *args):
-    """Печатаем список results построчно"""
     for row in results:
         print(*row)
 
 
 def pretty_output(results, *args):
-    """Вывод результатов в формате PrettyTable"""
     table = PrettyTable()
     table.field_names = results[0]
     table.align = 'l'
@@ -26,7 +24,6 @@ def pretty_output(results, *args):
 
 
 def file_output(results, cli_args):
-    """Сохранение результатов в csv файле"""
     results_dir = BASE_DIR / 'results'
     results_dir.mkdir(exist_ok=True)
     parser_mode = cli_args.mode
@@ -48,5 +45,4 @@ OUTPUT_FORMAT = {
 
 
 def control_output(results, cli_args):
-    """Контроль отображения результатов парсинга"""
     OUTPUT_FORMAT.get(cli_args.output)(results, cli_args)

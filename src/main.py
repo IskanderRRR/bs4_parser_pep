@@ -21,7 +21,6 @@ FINISH = 'Парсер завершил работу.'
 
 
 def pep(session):
-    """Собирает информацию о статусах PEP"""
     peps_main_page = PEPS_PYTHON_URL
     temp_results = {}
     results = [('Статус', 'Количество')]
@@ -60,7 +59,6 @@ def pep(session):
 
 
 def whats_new(session):
-    """Собирает информацию о новых статьях"""
     result = [('Ссылка на статью', 'Заголовок', 'Редактор, Автор')]
     soup = get_soup(session, WHATS_NEW_URL)
     sections_by_python = soup.select(
@@ -81,7 +79,6 @@ def whats_new(session):
 
 
 def latest_versions(session):
-    """Собирает информацию о последних версиях документации"""
     REG_EX = r'Python (?P<version>\d\.\d+) \((?P<status>.*)\)'
     soup = get_soup(session, MAIN_DOC_URL)
     ul_tags = soup.select('div.sphinxsidebarwrapper ul')
@@ -108,7 +105,6 @@ def latest_versions(session):
 
 
 def download(session):
-    """Скачивает архив с документацией"""
     soup = get_soup(session, DOWNLOAD_DOC_URL)
     pdf_a4_link = soup.select_one(
         'table.docutils a[href$="pdf-a4.zip"]'
