@@ -98,16 +98,16 @@ def pep(session):
     response = get_response(session, PEPS_URL)
     if response is None:
         return
-    peps_by_index = find_tag(
-        BeautifulSoup(response.text, features='lxml'),
-        'section',
-        attrs={'id': 'numerical-index'}
-    )
+
+    soup = BeautifulSoup(response.text, features='lxml')
+    peps_by_index = find_tag(soup, 'section', attrs={'id': 'numerical-index'})
     peps = find_tag(peps_by_index, 'tbody')
     peps = peps.find_all('tr')
+
     statuses_count = defaultdict(int)
-    results = [('Статус', 'Количество')]
     unexpected_statuses = []
+    results = [('Статус', 'Количество')]
+
     for pep in peps:
         preview_status = find_tag(pep, 'td').text[1:]
         second_column_tag = find_tag(
@@ -117,30 +117,29 @@ def pep(session):
         response = get_response(session, pep_url)
         if response is None:
             return
+
         card_text = find_tag(
-            BeautifulSoup(response.text, features='lxml'),
-            'dl'
+            BeautifulSoup(response.text, features='lxml'), 'dl'
         ).text
         status = re.search(STATUS_PATTERN, card_text).groups()[0]
         statuses_count[status] += 1
+
         if status not in EXPECTED_STATUS[preview_status]:
             unexpected_statuses.append(
                 (pep_url, status, EXPECTED_STATUS[preview_status])
             )
+
     if unexpected_statuses:
-        for item in unexpected_statuses:
-            pep_url, status, expected_status = item
+        for pep_url, status, expected_status in unexpected_statuses:
             logging.info(
-                'Несовпадающие статусы:\n'
+                f'Несовпадающие статусы:\n'
                 f'{pep_url}\n'
                 f'Статус в карточке: {status}\n'
                 f'Ожидаемые статусы: {expected_status}'
             )
-    for status in sorted(statuses_count.items()):
-        results.append(status)
-    results.append(
-        ('Total', sum(statuses_count[status] for status in statuses_count))
-    )
+
+    results.extend(sorted(statuses_count.items()))
+    results.append(('Total', sum(statuses_count.values())))
     return results
 
 
