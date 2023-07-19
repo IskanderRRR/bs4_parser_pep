@@ -1,116 +1,59 @@
 # Проект парсинга pep
 
-### Описание:
-Парсер выполняет сбор информации об актуальных версиях документации Python и стандартах PEP, отображая результаты парсинга в нескольких форматах на выбор.
-
-Список поддерживаемых сайтов:
-
-- https://docs.python.org/3/
-
-- https://peps.python.org/
-
-### Инструкция по запуску:
-**Клонируйте репозиторий:**
-```
-git clone git@github.com:VadimVolkovsky/bs4_parser_pep.git
-```
-
-**Установите и активируйте виртуальное окружение:**
-для MacOS:
+Парсер информации о python с **https://docs.python.org/3/** и  **https://peps.python.org/**
+### Перед использованием
+В корневой папке нужно созжать виртуальное окружение и установить зависимости.
 ```
 python3 -m venv venv
 ```
-
-для Windows:
-```
-python -m venv venv
-source venv/bin/activate
-source venv/Scripts/activate
-```
-**Установите зависимости из файла requirements.txt:**
 ```
 pip install -r requirements.txt
 ```
-
-**Перейдите в папку "src":**
+### Программа запускается из main.py в папке ./src/
 ```
-cd src/
+python3 main.py [вариант парсера] [аргументы]
 ```
-
-**Запустите парсер в одном из режимов:**
-
+### Встроенные парсеры
+- whats-new
+Парсер выводящий спсок изменений в python.
 ```
-python main.py <parser_mode> <args>
+python3 main.py whats-new [аргументы]
 ```
-
-### Режимы парсера:
-При запуске парсера необходимо выбрать один из режимов <parser_mode>:
-
-+ **whats-new**
-
-Парсинг последних обновлений с сайта
+- latest_versions
+Парсер выводящий список версий python и ссылки на их документацию.
 ```
-python main.py whats-new <args>
+python3 main.py latest-versions [аргументы]
 ```
-
-+ **latest-versions**
-
-Парсинг последних версий документации
+- download
+Парсер скачивающий zip архив с документацией python в pdf формате.
 ```
-python main.py latest_versions <args>
+python3 main.py download [аргументы]
 ```
-
-+ **download**
-
-Загрузка и сохранение архива с документацией
+- pep
+Парсер выводящий список статусов документов pep   
+и количество документов в каждом статусе. 
 ```
-python main.py download <args>
+python3 main.py pep [аргументы]
 ```
-
-+ **pep**
-
-Парсинг статусов PEP
+### Аргументы
+Есть возможность указывать аргументы для изменения работы программы:
+примеры на *whats-new*
+- -h, --help
+Общая информация о командах.
 ```
-python main.py pep <args>
+python3 main.py -h
 ```
-
-### Аргументы парсера:
-**При запуске парсера можно указать дополнительные аргументы <args>:**
-
-+ **Вывести информацию о парсере:**
+- -c, --clear-cache
+Очистка кеша перед выполнением парсинга.
 ```
-python main.py <parser_mode> -h
-python main.py <parser_mode> --help
+python3 main.py whats-new -c
 ```
-
-+ **Очистить кеш:**
+- -o {pretty,file}, --output {pretty,file}
+Дополнительные способы вывода данных   
+pretty - выводит данные в командной строке в таблице   
+file - сохраняет информацию в формате csv в папке ./results/
 ```
-python main.py <parser_mode> -c
-python main.py <parser_mode> --clear-cache
+python3 main.py whats-new -o file
 ```
-
-+ **Настроить режим отображения результатов:**
-
-Сохранение результатов в CSV файл:
-```
-python main.py <parser_mode> --output file
-```
-Отображение результатов в табличном формате в консоли:
-```
-python main.py <parser_mode> --output pretty
-```
-
-Если не указывать аргумент --output, результат парсинга будет выведен в консоль:
-  
-(кроме парсера download)
-```
-python main.py <parser_mode>
-```
-
-**Технологии:**
-- Python 3.9
-- BeautifulSoup4
-
-### Автор проекта:
-
+### Автор
 **[Iskander Ryskulov](https://github.com/IskanderRRR)**
