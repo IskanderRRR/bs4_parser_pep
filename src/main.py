@@ -105,10 +105,9 @@ def pep(session):
     peps = peps.find_all('tr')
 
     statuses_count = defaultdict(int)
-    unexpected_statuses = []
     results = [('Статус', 'Количество')]
 
-    for pep in peps:
+    for pep in tqdm(peps):
         preview_status = find_tag(pep, 'td').text[1:]
         second_column_tag = find_tag(
             pep, 'a', attrs={'class': 'pep reference internal'}
@@ -125,17 +124,11 @@ def pep(session):
         statuses_count[status] += 1
 
         if status not in EXPECTED_STATUS[preview_status]:
-            unexpected_statuses.append(
-                (pep_url, status, EXPECTED_STATUS[preview_status])
-            )
-
-    if unexpected_statuses:
-        for pep_url, status, expected_status in unexpected_statuses:
             logging.info(
                 f'Несовпадающие статусы:\n'
                 f'{pep_url}\n'
                 f'Статус в карточке: {status}\n'
-                f'Ожидаемые статусы: {expected_status}'
+                f'Ожидаемые статусы: {EXPECTED_STATUS[preview_status]}'
             )
 
     results.extend(sorted(statuses_count.items()))
