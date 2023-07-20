@@ -20,3 +20,5 @@ EXPECTED_STATUS = {
 }
 
 STATUS_PATTERN = '.*Status:\n(?P<status>.*)'
+
+downloads_dir = BASE_DIR / 'downloads'
