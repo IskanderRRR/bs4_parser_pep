@@ -1,3 +1,4 @@
+import os
 import re
 from urllib.parse import urljoin
 import logging
@@ -9,7 +10,8 @@ from collections import defaultdict
 
 from constants import (MAIN_DOC_URL, PEPS_URL,
                        EXPECTED_STATUS, STATUS_PATTERN,
-                       downloads_dir)
+                       BASE_DIR, DOWNLOADS_SUBDIR,
+                       ARCHIVE_PATTERN)
 from configs import configure_argument_parser, configure_logging
 from outputs import control_output
 from utils import get_response, find_tag
@@ -82,10 +84,11 @@ def download(session):
     main_tag = find_tag(soup, 'div', attrs={'role': 'main'})
     table_tag = find_tag(main_tag, 'table', attrs={'class': 'docutils'})
     pdf_a4_tag = find_tag(
-                 table_tag, 'a', attrs={'href': re.compile(r'.+pdf-a4\.zip$')})
+                 table_tag, 'a', attrs={'href': re.compile(ARCHIVE_PATTERN)})
     pdf_a4_link = pdf_a4_tag['href']
     archive_url = urljoin(downloads_url, pdf_a4_link)
-    filename = archive_url.split('/')[-1]
+    filename = os.path.basename(archive_url)
+    downloads_dir = BASE_DIR / DOWNLOADS_SUBDIR
     downloads_dir.mkdir(exist_ok=True)
     archive_path = downloads_dir / filename
     response = session.get(archive_url)

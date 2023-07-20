@@ -21,4 +21,6 @@ EXPECTED_STATUS = {
 
 STATUS_PATTERN = '.*Status:\n(?P<status>.*)'
 
-downloads_dir = BASE_DIR / 'downloads'
+DOWNLOADS_SUBDIR = 'downloads'
+
+ARCHIVE_PATTERN = r'.+pdf-a4\.zip$'
